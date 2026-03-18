@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankita's Birthday Countdown 💖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffe4e1 50%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(136, 28, 68, 0.3) 0%, 
+                rgba(255, 105, 180, 0.2) 50%, 
+                rgba(136, 28, 68, 0.4) 100%);
+            backdrop-filter: blur(2px);
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(255, 182, 193, 0.4);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .heading {
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 3rem;
+            padding: 0 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .countdown {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .time-box {
+            position: relative;
+        }
+
+        .glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 182, 193, 0.3);
+            filter: blur(20px);
+            border-radius: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .time-value {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            min-width: 120px;
+            transition: transform 0.3s ease;
+        }
+
+        .time-label {
+            margin-top: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .separator {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            margin: 0 0.5rem;
+            align-self: center;
+            padding-bottom: 40px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            font-weight: 300;
+            font-style: italic;
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-out 0.5s backwards;
+            padding: 0 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .birthday-message {
+            animation: scaleIn 0.8s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .birthday-emojis {
+            font-size: 6rem;
+            margin: 2rem 0;
+            animation: fadeIn 1s ease-out 1s backwards;
+        }
+
+        .emoji-bounce {
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .decorative-hearts {
+            display: flex;
+            gap: 1rem;
+            font-size: 3rem;
+            margin-top: 2rem;
+            animation: fadeIn 1s ease-out 1.5s backwards;
+        }
+
+        .decorative-hearts span {
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .heading {
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .countdown {
+                gap: 0.5rem;
+            }
+
+            .time-value {
+                font-size: 2.5rem;
+                padding: 1rem 1.5rem;
+                min-width: 80px;
+            }
+
+            .separator {
+                font-size: 2.5rem;
+                margin: 0 0.25rem;
+                padding-bottom: 30px;
+            }
+
+            .time-label {
+                font-size: 0.65rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .birthday-emojis {
+                font-size: 4rem;
+            }
+
+            .decorative-hearts {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .heading {
+                font-size: 1.25rem;
+            }
+
+            .time-value {
+                font-size: 2rem;
+                padding: 0.75rem 1rem;
+                min-width: 65px;
+            }
+
+            .separator {
+                font-size: 2rem;
+                padding-bottom: 25px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="background">
+        <img id="bgImage" src="/images/photo22.jpg" alt="Background" loading="lazy" onerror="this.onerror=null;this.src='public/images/photo22.jpg'">
+        <div class="overlay"></div>
+    </div>
+
+    <script>
+        // If the page is opened directly via file://, adjust the image path to the public folder
+        (function() {
+            try {
+                var img = document.getElementById('bgImage');
+                if (!img) return;
+                if (location.protocol === 'file:') {
+                    img.src = 'public/images/photo22.jpg';
+                }
+            } catch (e) {
+                // noop
+            }
+        })();
+    </script>
+
+    <!-- Floating Hearts -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Countdown Section -->
+        <div id="countdownSection">
+            <h1 class="heading" id="countdownHeading">
+                Counting every moment until your special day 💖
+            </h1>
+
+            <div class="countdown" id="countdown">
+                <div class="time-unit">
+                    <div class="time-box">
+                        <div class="glow"></div>
+                        <div class="time-value" id="days">00</div>
+                    </div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="time-unit">
+                    <div class="time-box">
+                        <div class="glow"></div>
+                        <div class="time-value" id="hours">00</div>
+                    </div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="time-unit">
+                    <div class="time-box">
+                        <div class="glow"></div>
+                        <div class="time-value" id="minutes">00</div>
+                    </div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="separator">:</div>
+                <div class="time-unit">
+                    <div class="time-box">
+                        <div class="glow"></div>
+                        <div class="time-value" id="seconds">00</div>
+                    </div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+
+            <p class="subtitle">
+                A beautiful surprise is waiting for you…
+            </p>
+        </div>
+
+        <!-- Birthday Section (Hidden Initially) -->
+        <div id="birthdaySection" class="hidden">
+            <h1 class="heading birthday-message">
+                It's your special day 🎉
+            </h1>
+
+            <p class="subtitle" style="font-size: 2rem; font-style: normal; margin-top: 1rem;">
+                Happy Birthday, Ankita! 🎂
+            </p>
+
+            <div class="birthday-emojis">
+                <span class="emoji-bounce" style="animation-delay: 0s;">🎉</span>
+                <span class="emoji-bounce" style="animation-delay: 0.2s;">🎊</span>
+                <span class="emoji-bounce" style="animation-delay: 0.4s;">🎈</span>
+            </div>
+
+            <div class="decorative-hearts">
+                <span style="animation-delay: 0s;">💖</span>
+                <span style="animation-delay: 0.2s;">✨</span>
+                <span style="animation-delay: 0.4s;">💝</span>
+                <span style="animation-delay: 0.6s;">✨</span>
+                <span style="animation-delay: 0.8s;">💖</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        // Create floating hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartCount = 15;
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        // Format number with leading zero
+        function formatNumber(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        // Calculate time left
+        function calculateTimeLeft() {
+            const targetDate = new Date('2026-03-20T00:00:00');
+            const now = new Date();
+            const difference = targetDate.getTime() - now.getTime();
+
+            if (difference <= 0) {
+                return {
+                    days: 0,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0,
+                    total: 0
+                };
+            }
+
+            return {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                minutes: Math.floor((difference / 1000 / 60) % 60),
+                seconds: Math.floor((difference / 1000) % 60),
+                total: difference
+            };
+        }
+
+        // Update countdown
+        function updateCountdown() {
+            const timeLeft = calculateTimeLeft();
+
+            document.getElementById('days').textContent = formatNumber(timeLeft.days);
+            document.getElementById('hours').textContent = formatNumber(timeLeft.hours);
+            document.getElementById('minutes').textContent = formatNumber(timeLeft.minutes);
+            document.getElementById('seconds').textContent = formatNumber(timeLeft.seconds);
+
+            // Add pulse animation to seconds
+            const secondsElement = document.getElementById('seconds');
+            secondsElement.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                secondsElement.style.transform = 'scale(1)';
+            }, 200);
+
+            return timeLeft.total;
+        }
+
+        // Trigger celebration
+        let hasTriggered = false;
+
+        function triggerCelebration() {
+            if (hasTriggered) return;
+            hasTriggered = true;
+
+            // Hide countdown, show birthday message
+            document.getElementById('countdownSection').classList.add('hidden');
+            document.getElementById('birthdaySection').classList.remove('hidden');
+
+            // Confetti burst
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+
+                confetti({
+                    particleCount,
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 60,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#FFB6C1', '#FFC0CB', '#FFE4E1', '#FF69B4', '#FF1493']
+                });
+
+                confetti({
+                    particleCount,
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 60,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#FFB6C1', '#FFC0CB', '#FFE4E1', '#FF69B4', '#FF1493']
+                });
+            }, 250);
+
+            // Firework effect
+            setTimeout(() => {
+                const count = 200;
+                const defaults = {
+                    origin: { y: 0.7 },
+                    colors: ['#FFB6C1', '#FFC0CB', '#FFE4E1', '#FF69B4', '#FF1493', '#FFFFFF']
+                };
+
+                function fire(particleRatio, opts) {
+                    confetti({
+                        ...defaults,
+                        ...opts,
+                        particleCount: Math.floor(count * particleRatio)
+                    });
+                }
+
+                fire(0.25, { spread: 26, startVelocity: 55 });
+                fire(0.2, { spread: 60 });
+                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+                fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+                fire(0.1, { spread: 120, startVelocity: 45 });
+            }, 1000);
+        }
+
+        // Initialize
+        createFloatingHearts();
+        updateCountdown();
+
+        // Update every second
+        setInterval(() => {
+            const total = updateCountdown();
+            if (total === 0) {
+                triggerCelebration();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
